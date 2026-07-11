@@ -105,7 +105,7 @@ def incompleta(figura):
     
 # Altera as cores da borda e preenchimento:
 cor_borda = "#000000"
-cor_preenchimento = "#ffffff"
+cor_preenchimento = ""
 
 def PintarBorda(event):
     global cor_borda
@@ -116,19 +116,19 @@ def PintarBorda(event):
 
 def PintarPreenchimento(event):
     global cor_preenchimento
-    cor = colorchooser.askcolor(initialcolor=cor_preenchimento)[1]
+    
+    cor_inicial = cor_preenchimento if cor_preenchimento else "#ffffff"
+    cor = colorchooser.askcolor(initialcolor=cor_inicial)[1]
     if cor:
         cor_preenchimento = cor
         indicador_preenchimento.configure(bg=cor_preenchimento)
 
 def reset_color(event):
     global cor_preenchimento
-    # No modo escuro reseta para a cor do canvas, no claro para branco
-    if canvas.cget('bg') == '#2d2d2d':
-        cor_preenchimento = "#2d2d2d"
-    else:
-        cor_preenchimento = "#ffffff"
-    indicador_preenchimento.configure(bg=cor_preenchimento)
+    cor_preenchimento = ""
+    
+    cor_fundo_canvas = canvas.cget('bg')
+    indicador_preenchimento.configure(bg=cor_fundo_canvas)
     
 
 # Função para alternar entre Modo Claro e Modo Escuro
@@ -146,6 +146,11 @@ def alternar_tema():
         style.map('TMenubutton', background=[('active', '#4a4a4a')], foreground=[('active', '#ffffff')])
         style.map('TButton', background=[('active', '#4a4a4a')], foreground=[('active', '#ffffff')])
         botao_tema.configure(text="ESCURO")
+        
+    
+        if cor_preenchimento == "":
+            indicador_preenchimento.configure(bg='#2d2d2d')
+            
     else:
         # --- Configurações do Modo Claro ---
         root.configure(bg='#ffffff')
@@ -159,6 +164,10 @@ def alternar_tema():
         style.map('TMenubutton', background=[('active', '#e4e4e4')], foreground=[('active', '#333333')])
         style.map('TButton', background=[('active', '#e4e4e4')], foreground=[('active', '#333333')])
         botao_tema.configure(text="CLARO")
+        
+        # Se estiver sem preenchimento, camufla com a cor do canvas claro
+        if cor_preenchimento == "":
+            indicador_preenchimento.configure(bg='#ffffff')
 
 
 #******* MAIN *******#
@@ -168,7 +177,7 @@ figura_nova = None
 
 root = Tk()
 root.title("Paint")
-root.geometry("740x680")  # Aumentado levemente a largura para acomodar os seletores lado a lado
+root.geometry("740x680")  
 root.configure(bg='#ffffff')   
 
 FONTE_MODERNA = ('Segoe UI', 10, 'normal')
@@ -194,7 +203,7 @@ tipo_figura_var = StringVar(root)
 option_menu = ttk.OptionMenu(frame, tipo_figura_var, 'LINHA', 'LINHA','RABISCO', 'CÍRCULO', 'OVAL', 'RETANGULO')
 option_menu.grid(column=1, row=0, sticky=W, **paddings)
 
-# --- NOVOS SELETORES DE COR DA IMAGEM ---
+# --- SELETORES DE COR DA IMAGEM ---
 label_borda = ttk.Label(frame, text='BORDA:')
 label_borda.grid(column=2, row=0, sticky=W, padx=(15, 2), pady=10)
 
@@ -206,8 +215,8 @@ indicador_borda.bind("<Button-1>", PintarBorda)
 label_preenchimento = ttk.Label(frame, text='PREENCHIMENTO:')
 label_preenchimento.grid(column=4, row=0, sticky=W, padx=(0, 2), pady=10)
 
-# Caixinha indicadora para Cor de Preenchimento
-indicador_preenchimento = Label(frame, bg=cor_preenchimento, width=3, height=1, relief="sunken", bd=1)
+# Caixinha indicadora para Cor de Preenchimento (Inicia branca, mimetizando o fundo do canvas claro)
+indicador_preenchimento = Label(frame, bg='#ffffff', width=3, height=1, relief="sunken", bd=1)
 indicador_preenchimento.grid(column=5, row=0, sticky=W, padx=(0, 5), pady=10)
 indicador_preenchimento.bind("<Button-1>", PintarPreenchimento)
 indicador_preenchimento.bind("<Button-3>", reset_color) # Clique direito do mouse reseta a cor
