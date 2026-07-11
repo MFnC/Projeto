@@ -13,6 +13,8 @@ def iniciar_figura_nova(event):
         figura_nova = ('circulo', (event.x, event.y, 0), cor_borda, cor_preenchimento)
     elif tipo_figura_var.get() == 'Retangulo':
         figura_nova = ("retangulo", (event.x, event.y, event.x, event.y), cor_borda, cor_preenchimento)
+    elif tipo_figura_var.get() == 'Oval':
+        figura_nova = ('oval', (event.x, event.y, event.x, event.y),cor_borda, cor_preenchimento)
 
 # Quando mouse é movido com o botão pressionado
 def atualizar_figura_nova(event):
@@ -31,6 +33,10 @@ def atualizar_figura_nova(event):
         figura_nova = ("retangulo", (figura_nova[1][0], figura_nova[1][1],
                                      event.x, event.y), 
                                      figura_nova[2],figura_nova[3])
+    elif figura_nova[0] == "oval":
+        figura_nova = ("oval", (figura_nova[1][0], figura_nova[1][1], event.x, event.y), 
+                                     figura_nova[2],figura_nova[3])
+
     desenhar_figuras()
     desenhar_figura_nova()
     
@@ -63,6 +69,9 @@ def desenhar_figuras():
                                     values[2], values[3],
                                     outline=borda, 
                                     fill=preenchimento)
+        elif fig == "oval":
+            canvas.create_oval(values[0], values[1], values[2], values[3], outline=borda,
+                               fill=preenchimento)
 
 def desenhar_figura_nova():
     fig, values, borda, preenchimento = figura_nova
@@ -82,6 +91,8 @@ def desenhar_figura_nova():
         canvas.create_rectangle(values[0], values[1], 
                                 values[2], values[3], 
                                 dash=(4, 2))
+    elif fig == "oval":
+        canvas.create_oval(values[0], values[1], values[2], values[3], dash=(4, 2))
 
 def incompleta(figura):
     fig, values, borda, preenchimento = figura
@@ -93,6 +104,9 @@ def incompleta(figura):
         return values[2] == 0
     elif fig == "retangulo":
         return (values[0], values[1]) == (values[2], values[3])
+    elif fig == "oval":
+        return (values[0], values[1]) == (values[2], values[3])
+
 
 # Altera as cores da borda e preenchimento:
 
@@ -131,7 +145,7 @@ label.grid(column=0, row=0, sticky=W, **paddings)
 # option menu
 tipo_figura_var = StringVar(root) # Guarda o tipo de figura selecionado no option menu (linha, rabisco, círculo ou retângulo)
 option_menu = ttk.OptionMenu(frame, tipo_figura_var,
-                             'Linha', 'Linha', 'Rabisco', 'Círculo', 'Retangulo')
+                             'Linha', 'Linha', 'Rabisco', 'Círculo', 'Retangulo', "Oval")
 option_menu.grid(column=1, row=0, sticky=W, **paddings)
 
 # clors menu
