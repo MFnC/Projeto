@@ -23,9 +23,6 @@ def atualizar_figura_nova(event):
                                  figura_nova[1][1], 
                                  event.x, event.y))
     elif figura_nova[0] == "circulo":
-         # CORRIGIDO: faltava o segundo "*" (potência, não multiplicação) e
-         # faltava o operador entre o parêntese e o "2" -> SyntaxError no original.
-         # Original do colega: (figura_nova[1][0] - event.x)*2 + (figura_nova[1][1] - event.y)2
          raio = ((figura_nova[1][0] - event.x)**2 + (figura_nova[1][1] - event.y)**2)**0.5
          figura_nova = ("circulo", (figura_nova[1][0], figura_nova[1][1], raio))
     elif figura_nova[0] == "retangulo":
