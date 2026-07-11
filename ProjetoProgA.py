@@ -94,7 +94,8 @@ def incompleta(figura):
     elif fig == "retangulo":
         return (values[0], values[1]) == (values[2], values[3])
 
-# Altera as cores da boda e preenchimento:
+# Altera as cores da borda e preenchimento:
+
 cor_borda = "Black"
 cor_preenchimento = ""
 def PintarBorda():
@@ -108,6 +109,10 @@ def PintarPreenchimento():
     cor = colorchooser.askcolor()[1]
     if cor:
         cor_preenchimento = cor
+
+def reset_color():
+    global cor_preenchimento
+    cor_preenchimento = ""
 
 
 #*** MAIN ***#
@@ -134,6 +139,7 @@ botao = Menubutton(root, text="Cores")
 menu = Menu(botao, tearoff=0)
 menu.add_command(label= 'Borda', command= PintarBorda)
 menu.add_command(label= 'Preenchimento', command= PintarPreenchimento)
+menu.add_command(label= 'Rsetar Preenchimento', command= reset_color)
 botao ["menu"] = menu
 botao.pack()
 
