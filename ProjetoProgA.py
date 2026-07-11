@@ -153,7 +153,7 @@ botao = Menubutton(root, text="Cores")
 menu = Menu(botao, tearoff=0)
 menu.add_command(label= 'Borda', command= PintarBorda)
 menu.add_command(label= 'Preenchimento', command= PintarPreenchimento)
-menu.add_command(label= 'Rsetar Preenchimento', command= reset_color)
+menu.add_command(label= 'Resetar Preenchimento', command= reset_color)
 botao ["menu"] = menu
 botao.pack()
 
