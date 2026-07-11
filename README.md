@@ -9,6 +9,15 @@
 ## 📋 Visão Geral do Projeto
 Este projeto consiste no desenvolvimento de uma aplicação desktop interativa de desenho vetorial, inspirada no software Paint clássico. O objetivo principal é aplicar conceitos de manipulação de interface gráfica (GUI), tratamento de eventos de mouse, renderização de primitivas gráficas e gerenciamento de estados em tempo real.
 
+## 👥 Metodologia de Desenho e Controle de Versão (Git)
+
+O projeto foi planejado e desenvolvido em conjunto pela equipe, utilizando o **Git** para garantir o paralelismo na construção das funcionalidades e manter a integridade do código-fonte. 
+
+A estrutura de ramificações (*branches*) foi organizada da seguinte forma:
+
+*   **`main`:** Ramificação principal que contém apenas as versões consolidadas, testadas e prontas da aplicação.
+*   **3 Branches de Desenvolvimento:** Criamos uma *branch* exclusiva para cada integrante do grupo. Isso permitiu que cada pessoa desenvolvesse trechos específicos do código em paralelo (como tratamento de eventos de desenho, design da interface e sistema de temas) sem que o trabalho de um interferisse diretamente no do outro.
+*   **Integração:** Após a conclusão e validação das ferramentas de forma isolada, os códigos foram integrados à *main* por meio de processos de mesclagem (*merge*), resolvendo conflitos de forma colaborativa.
 ---
 
 ## 🛠️ Funcionalidades Implementadas (Critérios de Avaliação)
