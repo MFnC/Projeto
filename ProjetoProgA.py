@@ -130,12 +130,13 @@ option_menu = ttk.OptionMenu(frame, tipo_figura_var,
 option_menu.grid(column=1, row=0, sticky=W, **paddings)
 
 # clors menu
-barra_menu = Menu(root)
-root.config(menu=barra_menu)
-menu_cores = Menu(barra_menu, tearoff=0)
-barra_menu.add_cascade(label="Cores", menu=menu_cores)
-menu_cores.add_command( label="Borda", command=PintarBorda)
-menu_cores.add_command(label="Preenchimento", command=PintarPreenchimento)
+botao = Menubutton(root, text="Cores")
+menu = Menu(botao, tearoff=0)
+menu.add_command(label= 'Borda', command= PintarBorda)
+menu.add_command(label= 'Preenchimento', command= PintarPreenchimento)
+botao ["menu"] = menu
+botao.pack()
+
 
 # Área de desenho
 canvas = Canvas(frame, bg='white', width=600, height=600)
