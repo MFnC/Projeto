@@ -3,7 +3,7 @@ from tkinter import ttk
 from tkinter import colorchooser
 
 
-# Hieraquia de Figuras
+# Hierarquia de Figuras
 
 class Figura:
     def __init__(self, cor_borda, cor_preenchimento):
