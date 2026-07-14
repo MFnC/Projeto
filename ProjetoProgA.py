@@ -14,6 +14,10 @@ from Classes_e_Subclasses import Circulo
 from Classes_e_Subclasses import Linha
 from Classes_e_Subclasses import Oval
 from Classes_e_Subclasses import Retangulo
+from Classes_e_Subclasses import Triangulo
+from Classes_e_Subclasses import Pentagono
+from Classes_e_Subclasses import Hexagono
+
 
 
 # Associa o texto do menu à classe correspondente
@@ -23,6 +27,9 @@ FABRICA_FIGURAS = {
     'CÍRCULO': Circulo,
     'OVAL': Oval,
     'RETANGULO': Retangulo,
+    'TRIANGULO': Triangulo,
+    'PENTAGONO': Pentagono,
+    'HEXAGONO': Hexagono
 }
 
 
@@ -161,7 +168,7 @@ label = ttk.Label(frame, text='FIGURA:')
 label.grid(column=0, row=0, sticky=W, **paddings)
 
 tipo_figura_var = StringVar(root)
-option_menu = ttk.OptionMenu(frame, tipo_figura_var, 'LINHA', 'LINHA', 'RABISCO', 'CÍRCULO', 'OVAL', 'RETANGULO')
+option_menu = ttk.OptionMenu(frame, tipo_figura_var, 'LINHA', 'LINHA', 'RABISCO', 'CÍRCULO', 'OVAL', 'RETANGULO', 'TRIANGULO', 'PENTAGONO', 'HEXAGONO')
 option_menu.grid(column=1, row=0, sticky=W, **paddings)
 
 # --- SELETORES DE COR DA IMAGEM ---

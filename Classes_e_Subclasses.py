@@ -1,5 +1,3 @@
-# Hierarquia de Figuras
-
 # classe base (Superclasse)
 class Figura:
     def __init__(self, cor_borda, cor_preenchimento):
@@ -81,3 +79,47 @@ class Retangulo(FiguraDoisPontos):
     def desenhar(self, canvas, dash=None):
         canvas.create_rectangle(self.x1, self.y1, self.x2, self.y2,
                                 outline=self.cor_borda, fill=self.cor_preenchimento, dash=dash)
+
+
+class Triangulo(FiguraDoisPontos):
+    def desenhar(self, canvas, dash=None):
+        cx = (self.x1 + self.x2) / 2
+        pontos = [
+            cx, self.y1,
+            self.x2, self.y2,
+            self.x1, self.y2
+        ]
+        canvas.create_polygon(pontos, outline=self.cor_borda, fill=self.cor_preenchimento, dash=dash)
+
+
+class Pentagono(FiguraDoisPontos):
+    def desenhar(self, canvas, dash=None):
+        cx = (self.x1 + self.x2) / 2
+        cy = (self.y1 + self.y2) / 2
+        rx = (self.x2 - self.x1) / 2
+        ry = (self.y2 - self.y1) / 2
+        pontos = [
+            cx, cy - ry,
+            cx + rx * 0.9511, cy - ry * 0.3090,
+            cx + rx * 0.5878, cy + ry * 0.8090,
+            cx - rx * 0.5878, cy + ry * 0.8090,
+            cx - rx * 0.9511, cy - ry * 0.3090
+        ]
+        canvas.create_polygon(pontos, outline=self.cor_borda, fill=self.cor_preenchimento, dash=dash)
+
+
+class Hexagono(FiguraDoisPontos):
+    def desenhar(self, canvas, dash=None):
+        cx = (self.x1 + self.x2) / 2
+        cy = (self.y1 + self.y2) / 2
+        rx = (self.x2 - self.x1) / 2
+        ry = (self.y2 - self.y1) / 2
+        pontos = [
+            cx, cy - ry,
+            cx + rx * 0.8660, cy - ry * 0.5,
+            cx + rx * 0.8660, cy + ry * 0.5,
+            cx, cy + ry,
+            cx - rx * 0.8660, cy + ry * 0.5,
+            cx - rx * 0.8660, cy - ry * 0.5
+        ]
+        canvas.create_polygon(pontos, outline=self.cor_borda, fill=self.cor_preenchimento, dash=dash)
