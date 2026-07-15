@@ -3,20 +3,20 @@ from tkinter import ttk
 from tkinter import colorchooser
 
 # Importa a classe base Figura (Superclasse)
-from Classes_e_Subclasses import Figura
+from Modelo.Figura import Figura
 
 # Importa as subclasses de Figura
-from Classes_e_Subclasses import FiguraDoisPontos
-from Classes_e_Subclasses import Rabisco
-from Classes_e_Subclasses import Circulo
+from Modelo.Figura.Subclasses_Figura.FiguraDoisPontos import FiguraDoisPontos
+from Modelo.Figura.Subclasses_Figura.Rabisco import Rabisco
+from Modelo.Figura.Subclasses_Figura.Circulo import Circulo
 
 # Importa as subclasses de FiguraDoisPontos
-from Classes_e_Subclasses import Linha
-from Classes_e_Subclasses import Oval
-from Classes_e_Subclasses import Retangulo
-from Classes_e_Subclasses import Triangulo
-from Classes_e_Subclasses import Pentagono
-from Classes_e_Subclasses import Hexagono
+from Modelo.Figura.Subclasses_FiguraDoisPontos.Linha import Linha
+from Modelo.Figura.Subclasses_FiguraDoisPontos.Oval import Oval
+from Modelo.Figura.Subclasses_FiguraDoisPontos.Retangulo import Retangulo
+from Modelo.Figura.Subclasses_FiguraDoisPontos.Triangulo import Triangulo
+from Modelo.Figura.Subclasses_FiguraDoisPontos.Pentagono import Pentagono
+from Modelo.Figura.Subclasses_FiguraDoisPontos.Hexagono import Hexagono
 
 
 
@@ -55,15 +55,13 @@ def incluir_figura_nova(event):
     if figura_nova is None:
         return
     if not figura_nova.incompleta():
-        figuras.append(figura_nova)
+        figuras.adicionar(figura_nova)
     desenhar_figuras()
-
 
 def desenhar_figuras():
     canvas.delete("all")
-    for figura in figuras:
+    for figura in figuras.obter_figuras():
         figura.desenhar(canvas)
-
 
 def desenhar_figura_nova():
     if figura_nova is None:
@@ -140,7 +138,9 @@ def alternar_tema():
 
 #******* MAIN *******#
 
-figuras = []
+# Importa a classe Dessenho
+from Modelo.Figura.Figuras import Figuras 
+figuras  = Figuras () 
 figura_nova = None
 
 root = Tk()
