@@ -1,4 +1,4 @@
-from tkinter import *
+from tkinter import Tk, Frame, StringVar, Label, Canvas, W, E
 from tkinter import ttk
 
 class JanelaPrincipal:

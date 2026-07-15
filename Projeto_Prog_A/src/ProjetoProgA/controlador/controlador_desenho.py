@@ -25,20 +25,8 @@ FABRICA_FIGURAS = {
 }
  
 class ControladorDesenho:
-    """
-    Camada de Controlador (Controller) do padrao MVC.
- 
-    Recebe os eventos encaminhados pela View, decide o que fazer
-    usando o Modelo (a instancia de Figuras), e manda a View se
-    redesenhar/atualizar depois.
-    """
  
     def __init__(self, figuras_modelo):
-        """
-        Args:
-            figuras_modelo: instancia da classe Figuras (Model), que
-                guarda a lista de figuras confirmadas no desenho.
-        """
         self.figuras_modelo = figuras_modelo
         self.figura_nova = None
         self.view = None  # setado depois, via definir_view()
@@ -47,9 +35,6 @@ class ControladorDesenho:
         self.cor_preenchimento = ""
  
     def definir_view(self, view):
-        """Conecta o Controlador a View. Chamado uma vez, no main.py,
-        logo apos a View ser criada (ela precisa do controlador no
-        construtor, entao a ligacao nos dois sentidos so fecha aqui)."""
         self.view = view
  
     # Eventos de mouse (encaminhados pela View)
