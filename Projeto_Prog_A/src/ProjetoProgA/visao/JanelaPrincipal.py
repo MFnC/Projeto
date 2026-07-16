@@ -75,6 +75,9 @@ class JanelaPrincipal:
         self.canvas.bind('<ButtonPress-1>', self.controlador.mouse_pressionado)
         self.canvas.bind('<B1-Motion>', self.controlador.mouse_movido)
         self.canvas.bind('<ButtonRelease-1>', self.controlador.mouse_solto)
+        # Duplo-clique: usado para finalizar a construcao de um Poligono
+        # (que e formado por varios cliques simples, um por vertice)
+        self.canvas.bind('<Double-Button-1>', self.controlador.finalizar_poligono)
 
         # Eventos de botão também encaminhados para o Controlador
         self.indicador_borda.bind("<Button-1>", self.controlador.borda_clicada)
