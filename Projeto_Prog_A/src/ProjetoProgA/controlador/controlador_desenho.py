@@ -8,9 +8,7 @@ from Modelo.Figura.Subclasses_Figura.Circulo import Circulo
 from Modelo.Figura.Subclasses_FiguraDoisPontos.Linha import Linha
 from Modelo.Figura.Subclasses_FiguraDoisPontos.Oval import Oval
 from Modelo.Figura.Subclasses_FiguraDoisPontos.Retangulo import Retangulo
-from Modelo.Figura.Subclasses_FiguraDoisPontos.Triangulo import Triangulo
-from Modelo.Figura.Subclasses_FiguraDoisPontos.Pentagono import Pentagono
-from Modelo.Figura.Subclasses_FiguraDoisPontos.Hexagono import Hexagono
+
  
 # Associa o texto do menu a classe correspondente
 FABRICA_FIGURAS = {
@@ -18,10 +16,7 @@ FABRICA_FIGURAS = {
     'RABISCO': Rabisco,
     'CÍRCULO': Circulo,
     'OVAL': Oval,
-    'RETANGULO': Retangulo,
-    'TRIANGULO': Triangulo,
-    'PENTAGONO': Pentagono,
-    'HEXAGONO': Hexagono,
+    'RETANGULO': Retangulo
 }
  
 class ControladorDesenho:

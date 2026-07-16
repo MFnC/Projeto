@@ -6,19 +6,19 @@ from tkinter import colorchooser
 from Modelo.Figura import Figura
 
 # Importa as subclasses de Figura
-from Modelo.Figura.Subclasses_Figura.FiguraDoisPontos import FiguraDoisPontos
-from Modelo.Figura.Subclasses_Figura.Rabisco import Rabisco
-from Modelo.Figura.Subclasses_Figura.Circulo import Circulo
+from Modelo.Figura.Subclasses_Figura import (
+    FiguraDoisPontos,
+    Rabisco,
+    Circulo,
+    Poligono
+)
 
 # Importa as subclasses de FiguraDoisPontos
-from Modelo.Figura.Subclasses_FiguraDoisPontos.Linha import Linha
-from Modelo.Figura.Subclasses_FiguraDoisPontos.Oval import Oval
-from Modelo.Figura.Subclasses_FiguraDoisPontos.Retangulo import Retangulo
-from Modelo.Figura.Subclasses_FiguraDoisPontos.Triangulo import Triangulo
-from Modelo.Figura.Subclasses_FiguraDoisPontos.Pentagono import Pentagono
-from Modelo.Figura.Subclasses_FiguraDoisPontos.Hexagono import Hexagono
-
-
+from Modelo.Figura.Subclasses_FiguraDoisPontos import (
+    Linha,
+    Oval,
+    Retangulo
+)
 
 # Associa o texto do menu à classe correspondente
 FABRICA_FIGURAS = {
@@ -27,9 +27,7 @@ FABRICA_FIGURAS = {
     'CÍRCULO': Circulo,
     'OVAL': Oval,
     'RETANGULO': Retangulo,
-    'TRIANGULO': Triangulo,
-    'PENTAGONO': Pentagono,
-    'HEXAGONO': Hexagono
+    'POLIGONO': Poligono
 }
 
 
@@ -37,8 +35,36 @@ FABRICA_FIGURAS = {
 
 def iniciar_figura_nova(event):
     global figura_nova
+
+    if tipo_figura_var.get() == "POLIGONO":
+
+        if figura_nova is None:
+
+            figura_nova = Poligono(
+                event.x,
+                event.y,
+                cor_borda,
+                cor_preenchimento
+            )
+
+        else:
+
+            figura_nova.adicionar_vertice(
+                event.x,
+                event.y
+            )
+
+        desenhar_figuras()
+        desenhar_figura_nova()
+        return
+
     classe = FABRICA_FIGURAS[tipo_figura_var.get()]
-    figura_nova = classe(event.x, event.y, cor_borda, cor_preenchimento)
+    figura_nova = classe(
+        event.x,
+        event.y,
+        cor_borda,
+        cor_preenchimento
+    )
 
 
 def atualizar_figura_nova(event):
@@ -49,13 +75,22 @@ def atualizar_figura_nova(event):
     desenhar_figuras()
     desenhar_figura_nova()
 
-
 def incluir_figura_nova(event):
+
     global figura_nova
+
     if figura_nova is None:
         return
+
+    if tipo_figura_var.get() == "POLIGONO":
+        return
+
     if not figura_nova.incompleta():
+
         figuras.adicionar(figura_nova)
+
+    figura_nova = None
+
     desenhar_figuras()
 
 def desenhar_figuras():
@@ -67,6 +102,24 @@ def desenhar_figura_nova():
     if figura_nova is None:
         return
     figura_nova.desenhar(canvas, dash=(4, 2))
+
+def finalizar_poligono(event):
+
+    global figura_nova
+
+    if figura_nova is None:
+        return
+
+    if tipo_figura_var.get() != "POLIGONO":
+        return
+
+    figura_nova.finalizar()
+
+    figuras.adicionar(figura_nova)
+
+    figura_nova = None
+
+    desenhar_figuras()
 
 
 # Altera as cores da borda e preenchimento:
@@ -168,7 +221,7 @@ label = ttk.Label(frame, text='FIGURA:')
 label.grid(column=0, row=0, sticky=W, **paddings)
 
 tipo_figura_var = StringVar(root)
-option_menu = ttk.OptionMenu(frame, tipo_figura_var, 'LINHA', 'LINHA', 'RABISCO', 'CÍRCULO', 'OVAL', 'RETANGULO', 'TRIANGULO', 'PENTAGONO', 'HEXAGONO')
+option_menu = ttk.OptionMenu(frame, tipo_figura_var, 'LINHA', 'LINHA', 'RABISCO', 'CÍRCULO', 'OVAL', 'RETANGULO', 'POLIGONO')
 option_menu.grid(column=1, row=0, sticky=W, **paddings)
 
 # --- SELETORES DE COR DA IMAGEM ---
@@ -206,5 +259,6 @@ frame.pack(padx=20, pady=20)
 canvas.bind('<ButtonPress-1>', iniciar_figura_nova)
 canvas.bind('<B1-Motion>', atualizar_figura_nova)
 canvas.bind('<ButtonRelease-1>', incluir_figura_nova)
+canvas.bind("<Double-Button-1>", finalizar_poligono)
 
 root.mainloop()
