@@ -78,6 +78,10 @@ class JanelaPrincipal:
         # Duplo-clique: usado para finalizar a construcao de um Poligono
         # (que e formado por varios cliques simples, um por vertice)
         self.canvas.bind('<Double-Button-1>', self.controlador.finalizar_poligono)
+        # Movimento livre (sem botao pressionado): usado para a "linha
+        # elastica" do Poligono, que acompanha o mouse entre um clique
+        # e outro, mostrando onde o proximo vertice vai cair
+        self.canvas.bind('<Motion>', self.controlador.mouse_movido_livre)
 
         # Eventos de botão também encaminhados para o Controlador
         self.indicador_borda.bind("<Button-1>", self.controlador.borda_clicada)

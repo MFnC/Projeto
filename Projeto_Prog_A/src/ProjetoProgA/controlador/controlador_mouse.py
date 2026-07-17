@@ -1,10 +1,6 @@
 # controlador_mouse.py
-from Modelo.Figura.Subclasses_Figura.Rabisco import Rabisco
-from Modelo.Figura.Subclasses_Figura.Circulo import Circulo
-from Modelo.Figura.Subclasses_Figura.Poligono import Poligono
-from Modelo.Figura.Subclasses_FiguraDoisPontos.Linha import Linha
-from Modelo.Figura.Subclasses_FiguraDoisPontos.Oval import Oval
-from Modelo.Figura.Subclasses_FiguraDoisPontos.Retangulo import Retangulo
+from Modelo.Figura.Subclasses_Figura import Rabisco, Circulo, Poligono
+from Modelo.Figura.Subclasses_FiguraDoisPontos import Linha, Oval, Retangulo
 
 # Dicionario pra associar o texto que vem da tela com a classe certa
 FABRICA_FIGURAS = {
