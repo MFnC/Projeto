@@ -1,90 +1,129 @@
-# controlador_mouse.py
+from abc import ABC, abstractmethod
+
 from Modelo.Figura.Subclasses_Figura import Rabisco, Circulo, Poligono
 from Modelo.Figura.Subclasses_FiguraDoisPontos import Linha, Oval, Retangulo
 
-# Dicionario pra associar o texto que vem da tela com a classe certa
-FABRICA_FIGURAS = {
-    'LINHA': Linha,
-    'RABISCO': Rabisco,
-    'CÍRCULO': Circulo,
-    'OVAL': Oval,
-    'RETANGULO': Retangulo,
-    'POLIGONO': Poligono
-}
+# --- CLASSE BASE DO STATE ---
+class Ferramenta_state(ABC):
+    def __init__(self, controlador):
+        self.ctx = controlador  # Referência ao controlador principal (Contexto)
 
-class ControladorMouseMixin:
-    def mouse_pressionado(self, event):
-        tipo_selecionado = self.view.tipo_figura_selecionado()
+    @abstractmethod
+    def pressionado(self, event): pass
 
-        # O poligono precisa de cliques simples alternados para adicionar vértices
-        if tipo_selecionado == "POLIGONO":
-            if self.figura_nova is None:
-                self.figura_nova = Poligono(
-                    event.x, event.y, 
-                    self.cor_borda, self.cor_preenchimento
-                )
-            else:
-                self.figura_nova.adicionar_vertice(event.x, event.y)
-            
-            # Manda a tela desenhar o poligono em andamento
-            self.view.redesenhar(self.figuras_modelo.obter_figuras(), self.figura_nova)
+    @abstractmethod
+    def movido(self, event): pass
+
+    @abstractmethod
+    def movido_livre(self, event): pass
+
+    @abstractmethod
+    def solto(self, event): pass
+
+    def duplo_clique(self, event): pass
+
+
+# --- STATE PARA FORMAS PADRÃO ---
+class FormaPadrao_state(Ferramenta_state):
+    def __init__(self, controlador, classe_figura):
+        super().__init__(controlador)
+        self.classe_figura = classe_figura
+
+    def pressionado(self, event):
+        self.ctx.figura_nova = self.classe_figura(
+            event.x, event.y, self.ctx.cor_borda, self.ctx.cor_preenchimento
+        )
+
+    def movido(self, event):
+        if self.ctx.figura_nova:
+            self.ctx.figura_nova.atualizar(event.x, event.y)
+            self.ctx.view.redesenhar(self.ctx.figuras_modelo.obter_figuras(), self.ctx.figura_nova)
+
+    def movido_livre(self, event):
+        pass
+
+    def solto(self, event):
+        if self.ctx.figura_nova:
+            if not self.ctx.figura_nova.incompleta():
+                self.ctx.figuras_modelo.adicionar(self.ctx.figura_nova)
+            self.ctx.figura_nova = None
+            self.ctx.view.redesenhar(self.ctx.figuras_modelo.obter_figuras(), None)
+
+
+# --- STATE EXCLUSIVO DO POLÍGONO ---
+class Poligono_state(Ferramenta_state):
+    def pressionado(self, event):
+        if self.ctx.figura_nova is None:
+            self.ctx.figura_nova = Poligono(
+                event.x, event.y, self.ctx.cor_borda, self.ctx.cor_preenchimento
+            )
+        else:
+            self.ctx.figura_nova.adicionar_vertice(event.x, event.y)
+        self.ctx.view.redesenhar(self.ctx.figuras_modelo.obter_figuras(), self.ctx.figura_nova)
+
+    def movido(self, event):
+        pass
+
+    def movido_livre(self, event):
+        if self.ctx.figura_nova:
+            self.ctx.figura_nova.atualizar(event.x, event.y)
+            self.ctx.view.redesenhar(self.ctx.figuras_modelo.obter_figuras(), self.ctx.figura_nova)
+
+    def solto(self, event):
+        pass
+
+    def duplo_clique(self, event):
+        if self.ctx.figura_nova is None:
             return
 
-        # Para as outras formas cria normal
-        classe = FABRICA_FIGURAS[tipo_selecionado]
-        self.figura_nova = classe(event.x, event.y, self.cor_borda, self.cor_preenchimento)
- 
-    def mouse_movido(self, event):
-        # Atualiza a prévia das outras figuras enquanto arrasta o mouse pressionado
-        if self.figura_nova is None:
-            return
-        if self.view.tipo_figura_selecionado() == "POLIGONO":
-            return
-        self.figura_nova.atualizar(event.x, event.y)
-        self.view.redesenhar(self.figuras_modelo.obter_figuras(), self.figura_nova)
-
-    def mouse_movido_livre(self, event):
-        # Desenha e estica a linha elástica temporária seguindo o mouse livremente
-        if self.figura_nova is None:
-            return
-        if self.view.tipo_figura_selecionado() == "POLIGONO":
-            self.figura_nova.atualizar(event.x, event.y)
-            self.view.redesenhar(self.figuras_modelo.obter_figuras(), self.figura_nova)
- 
-    def mouse_solto(self, event):
-        if self.figura_nova is None:
-            return
-            
-        # IMPORTANTE: Ignora se for poligono para permitir o desenho com cliques soltos!
-        if self.view.tipo_figura_selecionado() == "POLIGONO":
-            return
-
-        # Se nao estiver vazia, adiciona na lista do modelo
-        if not self.figura_nova.incompleta():
-            self.figuras_modelo.adicionar(self.figura_nova)
-        self.figura_nova = None
-        self.view.redesenhar(self.figuras_modelo.obter_figuras(), None)
-
-    def finalizar_poligono(self, event):
-        # Duplo clique fecha a forma e salva o poligono de forma limpa
-        if self.figura_nova is None:
-            return
-
-        if self.view.tipo_figura_selecionado() != "POLIGONO":
-            return
-
-        # Filtra os pontos repetidos ou idênticos provocados pela sensibilidade do clique duplo
         pontos_filtrados = []
-        for p in self.figura_nova.pontos:
+        for p in self.ctx.figura_nova.pontos:
             if not pontos_filtrados or p != pontos_filtrados[-1]:
                 pontos_filtrados.append(p)
-        
-        self.figura_nova.pontos = pontos_filtrados
+        self.ctx.figura_nova.pontos = pontos_filtrados
 
-        # Só finaliza se tiver o mínimo de pontos válidos para fechar uma área
-        if len(self.figura_nova.pontos) >= 3:
-            self.figura_nova.finalizar()
-            self.figuras_modelo.adicionar(self.figura_nova)
+        if len(self.ctx.figura_nova.pontos) >= 3:
+            self.ctx.figura_nova.finalizar()
+            self.ctx.figuras_modelo.adicionar(self.ctx.figura_nova)
             
-        self.figura_nova = None
-        self.view.redesenhar(self.figuras_modelo.obter_figuras(), None)
+        self.ctx.figura_nova = None
+        self.ctx.view.redesenhar(self.ctx.figuras_modelo.obter_figuras(), None)
+
+
+# --- DICIONÁRIO AUXILIAR PARA TROCA DE STATES ---
+MAPA_ESTADOS = {
+    'LINHA': lambda ctx: FormaPadrao_state(ctx, Linha),
+    'RABISCO': lambda ctx: FormaPadrao_state(ctx, Rabisco),
+    'CÍRCULO': lambda ctx: FormaPadrao_state(ctx, Circulo),
+    'OVAL': lambda ctx: FormaPadrao_state(ctx, Oval),
+    'RETANGULO': lambda ctx: FormaPadrao_state(ctx, Retangulo),
+    'POLIGONO': lambda ctx: Poligono_state(ctx)
+}
+
+# Mantemos isso aqui para a sua Main.py continuar importando sem dar erro
+FABRICA_FIGURAS = {k: None for k in MAPA_ESTADOS.keys()}
+
+
+# --- MIXIN QUE COMPORTA A MÁQUINA DE ESTADOS DO MOUSE ---
+class ControladorMouseMixin:
+    def atualizar_state(self):
+        """Busca a ferramenta selecionada na View e altera o State atual"""
+        tipo = self.view.tipo_figura_selecionado()
+        if tipo in MAPA_ESTADOS:
+            self.state_atual = MAPA_ESTADOS[tipo](self)
+
+    def mouse_pressionado(self, event):
+        self.atualizar_state()  # Atualiza o state dinamicamente antes do clique
+        self.state_atual.pressionado(event)
+ 
+    def mouse_movido(self, event):
+        self.state_atual.movido(event)
+
+    def mouse_movido_livre(self, event):
+        self.state_atual.movido_livre(event)
+ 
+    def mouse_solto(self, event):
+        self.state_atual.solto(event)
+
+    def finalizar_poligono(self, event):
+        self.state_atual.duplo_clique(event)
