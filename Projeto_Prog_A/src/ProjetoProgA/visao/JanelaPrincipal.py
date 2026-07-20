@@ -8,7 +8,7 @@ class JanelaPrincipal:
 
         self.root = Tk()
         self.root.title("Paint")
-        self.root.geometry("740x680")
+        self.root.geometry("860x680")
         self.root.configure(bg='#ffffff')
 
         self._fonte_moderna = ('Segoe UI', 10, 'normal')
@@ -65,9 +65,16 @@ class JanelaPrincipal:
         self.botao_tema = ttk.Button(self.frame, text="CLARO")
         self.botao_tema.grid(column=8, row=0, sticky=W, pady=10)
 
+        # Botoes de Salvar e Abrir arquivo
+        self.botao_salvar = ttk.Button(self.frame, text="SALVAR")
+        self.botao_salvar.grid(column=9, row=0, sticky=W, padx=(15, 0), pady=10)
+
+        self.botao_abrir = ttk.Button(self.frame, text="ABRIR")
+        self.botao_abrir.grid(column=10, row=0, sticky=W, padx=(5, 0), pady=10)
+
         self.canvas = Canvas(self.frame, bg='#ffffff', width=680, height=580,
                              highlightthickness=1, highlightbackground='#e0e0e0', bd=0)
-        self.canvas.grid(column=0, row=1, columnspan=9, sticky=W, pady=(15, 0))
+        self.canvas.grid(column=0, row=1, columnspan=11, sticky=W, pady=(15, 0))
         self.frame.pack(padx=20, pady=20)
 
     def _conectar_eventos(self):
@@ -88,6 +95,8 @@ class JanelaPrincipal:
         self.indicador_preenchimento.bind("<Button-1>", self.controlador.preenchimento_clicado)
         self.indicador_preenchimento.bind("<Button-3>", self.controlador.preenchimento_resetado)
         self.botao_tema.configure(command=self.controlador.tema_clicado)
+        self.botao_salvar.configure(command=self.controlador.salvar_clicado)
+        self.botao_abrir.configure(command=self.controlador.abrir_clicado)
 
     # Métodos públicos chamados pelo Controlador para atualizar a tela
 
