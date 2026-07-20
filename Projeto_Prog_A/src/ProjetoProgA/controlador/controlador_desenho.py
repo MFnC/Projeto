@@ -1,7 +1,8 @@
 from .controlador_mouse import ControladorMouseMixin, FABRICA_FIGURAS
 from .controlador_estilo import ControladorEstiloMixin
+from .controlador_arquivo import ControladorArquivoMixin
 
-class ControladorDesenho(ControladorMouseMixin, ControladorEstiloMixin):
+class ControladorDesenho(ControladorMouseMixin, ControladorEstiloMixin, ControladorArquivoMixin):
  
     def __init__(self, figuras_modelo):
         self.figuras_modelo = figuras_modelo

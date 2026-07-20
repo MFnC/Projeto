@@ -10,3 +10,6 @@ class Figuras:
 
     def obter_figuras(self):
         return self.figuras
+    
+    def carregar(self, lista_de_figuras):
+        self.figuras = list(lista_de_figuras)
