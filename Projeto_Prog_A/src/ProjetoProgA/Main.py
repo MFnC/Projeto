@@ -1,6 +1,6 @@
 from Modelo.Figura.Figuras import Figuras
-from controlador.controlador_desenho import ControladorDesenho, FABRICA_FIGURAS
-from visao.JanelaPrincipal import JanelaPrincipal
+from Controlador.controlador_desenho import ControladorDesenho, FABRICA_FIGURAS
+from Visao.JanelaPrincipal import JanelaPrincipal
 
 if __name__ == "__main__":
     modelo = Figuras()

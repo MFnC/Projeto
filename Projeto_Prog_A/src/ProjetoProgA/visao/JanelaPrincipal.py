@@ -12,6 +12,20 @@ class JanelaPrincipal:
         self.root.configure(bg='#ffffff')
 
         self._fonte_moderna = ('Segoe UI', 10, 'normal')
+        # Todos os atributos que serao preenchidos por _construir_estilo
+        # e _construir_widgets ja ficam declarados aqui, para que a
+        # estrutura do objeto seja visivel so de olhar o _init_.
+        self.style = None
+        self.frame = None
+        self.tipo_figura_var = None
+        self.option_menu = None
+        self.indicador_borda = None
+        self.indicador_preenchimento = None
+        self.botao_tema = None
+        self.botao_salvar = None
+        self.botao_abrir = None
+        self.canvas = None
+
         self._construir_estilo()
         self._construir_widgets(tipos_de_figura)
         self._conectar_eventos()
